@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>Roadmechs - My Profile</title>
+	<title>Roadmechs - Update Profile</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -39,7 +39,7 @@
 			</div>
 			<div class='percent' id='percent1'>0%</div>
 			<div class="loading-text">
-				Loading...
+				Roadmech..
 			</div>
 		</div>
 	</div> -->
@@ -103,7 +103,7 @@
 						<span class="user-name">Ross C. Lopez</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="./update-profile.php"><i class="dw dw-user1"></i>Update Profile</a>
+						<a class="dropdown-item" href="./update_profile_d.php"><i class="dw dw-user1"></i>Update Profile</a>
 						<a class="dropdown-item" href="login.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
@@ -114,7 +114,7 @@
 	<!--*** Nav. menu starts here ***-->
 	<div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="index.php">
+			<a href="./dashboard_d.php">
 				<img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
 				<img src="vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
 			</a>
@@ -126,12 +126,12 @@
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li>
-						<a href="./index.php" class="dropdown-toggle no-arrow">
+						<a href="./dashboard_d.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-home"></span><span class="mtext">Home</span>
 						</a>
 					</li>
 					<li>
-						<a href="./profile.php" class="dropdown-toggle no-arrow">
+						<a href="./myprofile_d.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-user1"></span><span class="mtext">Profile</span>
 						</a>
 					</li>
@@ -159,21 +159,22 @@
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Profile</li>
+									<li class="breadcrumb-item active" aria-current="page">Update Profile</li>
 								</ol>
 							</nav>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-30">
+					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
 						<div class="pd-20 card-box height-100-p">
 							<div class="profile-photo">
 								
+								<!-- <a href="modal" data-toggle="modal" data-target="#modal" class="edit-avatar"><i class="fa fa-pencil"></i></a> -->
 								<img src="vendors/images/photo1.jpg" alt="profile image" class="avatar-photo">
 								<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 									
-									<div class="modal-dialog modal-dialog-centered" role="document">
+									<!-- <div class="modal-dialog modal-dialog-centered" role="document">
 										<div class="modal-content">
 											<div class="modal-body pd-5">
 												<div class="img-container">
@@ -185,13 +186,13 @@
 												<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>
 							</div>
 							<h5 class="text-center h5 mb-0">Ross C. Lopez</h5>
 							<p class="text-center text-muted font-14">Lorem ipsum dolor sit amet</p>
 							<div class="profile-info">
-								<h5 class="mb-20 h5 text-blue">Contact Information</h5>
+								<h5 class="mb-20 h5 text-blue">My Information</h5>
 								<ul>
 									<li>
 										<span>Email Address:</span>
@@ -202,7 +203,7 @@
 										619-229-0054
 									</li>
 									<li>
-										<span>City:</span>
+										<span>State:</span>
 										NYC
 									</li>
 									<li>
@@ -219,6 +220,102 @@
 									<li><a href="#" class="btn" data-bgcolor="#f46f30" data-color="#ffffff"><i class="fa fa-instagram"></i></a></li>
 									<li><a href="#" class="btn" data-bgcolor="#00b489" data-color="#ffffff"><i class="fa fa-whatsapp"></i></a></li>
 								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
+						<div class="card-box height-100-p overflow-hidden">
+							<div class="profile-tab height-100-p">
+								<div class="tab height-100-p">
+									<ul class="nav nav-tabs customtab" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" data-toggle="tab" href="#setting" role="tab">Settings</a>
+										</li>
+									</ul>
+									<div class="tab-content">
+										<!-- Setting Tab start -->
+										<div class="tab-pane show active fade height-100-p" id="setting" role="tabpanel">
+											<div class="profile-setting">
+
+											<!-- Form to update user profile details -->
+												<form action="#" method="post">
+													<ul class="profile-edit-list row">
+														<li class="weight-500 col-md-6">
+															<h4 class="text-blue h5 mb-20">Edit Personal Settings</h4>
+															<div class="form-group">
+																<label>Full Name</label>
+																<input class="form-control form-control-lg" type="text">
+															</div>
+															
+															<div class="form-group">
+																<label>Email</label>
+																<input class="form-control form-control-lg" type="email">
+															</div>
+
+															<div class="form-group">
+																<label>Bio</label>
+																<input class="form-control form-control-lg" type="text">
+															</div>
+															
+															<div class="form-group">
+																<div class="d-flex">
+					
+																</div>
+															</div>
+														
+															<div class="form-group">
+																<label>State</label>
+																<input class="form-control form-control-lg" type="text">
+															</div>
+															<div class="form-group">
+																<label>Profile picture</label>
+																<input class="form-control form-control-lg" type="file" accept=".png,.jpg">
+															</div>
+
+															<div class="form-group">
+																<label>Phone Number</label>
+																<input class="form-control form-control-lg" type="text">
+															</div>
+															
+															<div class="form-group">
+																<label>Address</label>
+																<textarea class="form-control"></textarea>
+															</div>
+													
+														
+															<div class="form-group">
+																<div class="custom-control custom-checkbox mb-5">
+																	<input type="checkbox" class="custom-control-input" id="customCheck1-1">
+																	<label class="custom-control-label weight-400" for="customCheck1-1">I agree to receive notification emails</label>
+																</div>
+															</div>
+														</li>
+														<li class="weight-500 col-md-6">
+															<h4 class="text-blue h5 mb-20">Edit Social Media links</h4>
+															<div class="form-group">
+																<label>Facebook Username:</label>
+																<input class="form-control form-control-lg" type="text" >
+															</div>
+															<div class="form-group">
+																<label>Whatsapp No:</label>
+																<input class="form-control form-control-lg" type="text" >
+															</div>
+														
+															<div class="form-group">
+																<label>Instagram Username:</label>
+																<input class="form-control form-control-lg" type="text" >
+															</div>
+															<div class="form-group mb-0">
+																<input type="submit" class="btn btn-primary" value="Save & Update">
+															</div>
+														</li>
+													</ul>
+												</form>
+											</div>
+										</div>
+										<!-- Setting Tab End -->
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

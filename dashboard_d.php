@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>Roadmechs - Mechanics </title>
+	<title>Roadmechs - Dashboard</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -18,6 +18,8 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -43,7 +45,7 @@
 		</div>
 	</div> -->
 
-		<div class="header">
+	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
@@ -147,75 +149,77 @@
 	<!--*** Nav. menu ends here ***-->
 
 	<div class="main-container">
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<div class="container pd-0">
-					<div class="page-header">
-						<div class="row">
-							<div class="col-md-12 col-sm-12">
-								<div class="title">
-									<h4>Mechanics</h4>
-								</div>
-								<nav aria-label="breadcrumb" role="navigation">
-									<ol class="breadcrumb">
-										<li class="breadcrumb-item"><a href="./dashboard_d.php">Home</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Mechanics near me</li>
-									</ol>
-								</nav>
+		<div class="pd-ltr-20">
+			<div class="card-box pd-20 height-100-p mb-30">
+				<div class="row align-items-center">
+					<div class="col-md-4">
+						<img src="vendors/images/banner-img.png" alt="img">
+					</div>
+					<div class="col-md-8">
+						<h4 class="font-20 weight-500 mb-10 text-capitalize">
+							Welcome back <div class="weight-600 font-30 text-blue">Johnny Brown!</div>
+						</h4>
+						<p class="font-18 max-width-600">Lorem ipsum dolor sit ameta. Autem modi, corrupti, nobis ea iure fugiat.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart"></div>
+							</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">&#8358;23,900</div>
+								<div class="weight-600 font-14">Spent this year</div>
 							</div>
 						</div>
 					</div>
-					<div class="contact-directory-list">
-						<ul class="row">
-							<li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-								<div class="contact-directory-box">
-									<div class="contact-dire-info text-center">
-										<div class="contact-avatar">
-											<span>
-												<img src="vendors/images/photo2.jpg" alt="">
-											</span>
-										</div>
-										<div class="contact-name">
-											<h4>Wade Wilson</h4>
-											<p>Pay Rate: <span>&#8358;22,000</span></p>
-											<div class="work text-success"><i class="icon-copy dw dw-flag1"></i> Abuja</div>
-										</div>
-										<div class="profile-sort-desc">
-											Lorem ipsum dolor sit amet, consectetur adipisicing magna aliqua.
-										</div>
-									</div>
-									<div class="view-contact">
-										<a href="javascript:void();">View Profile</a>
-									</div>
-								</div>
-							</li>
-						</ul>
+				</div>
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart2"></div>
+							</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">&#8358;14,000</div>
+								<div class="weight-600 font-14">Spent this month</div>
+							</div>
+						</div>
 					</div>
 				</div>
-
-				<div class="blog-pagination mb-30">
-					<div class="btn-toolbar justify-content-center mb-15">
-						<div class="btn-group">
-							<a href="javascript:void();" class="btn btn-outline-primary prev"><i class="fa fa-angle-double-left"></i></a>
-							<span class="btn btn-primary current">1</span>
-							<a href="#" class="btn btn-outline-primary">2</a>
-							<a href="#" class="btn btn-outline-primary">3</a>
-							<a href="#" class="btn btn-outline-primary next"><i class="fa fa-angle-double-right"></i></a>
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart3"></div>
+							</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">&#8358;3500</div>
+								<div class="weight-600 font-14">Spent Today</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+	
 			<div class="footer-wrap pd-20 mb-20 card-box">
 				&copy;Roadmechs
 			</div>
 		</div>
 	</div>
-
-	
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="src/plugins/apexcharts/apexcharts.min.js"></script>
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<script src="vendors/scripts/dashboard.js"></script>
 </body>
 </html>

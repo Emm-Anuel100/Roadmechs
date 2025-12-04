@@ -1,3 +1,3 @@
 # Roadmechs
 
-Roadmechs - simple PWA platform connecting drivers to closest mechanic.
+Roadmechs - simple PWA platform connecting drivers to nearest mechanic.

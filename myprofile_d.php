@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>Roadmechs - Mechanics </title>
+	<title>Roadmechs - My Profile</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -18,6 +18,7 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/cropperjs/dist/cropper.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -149,58 +150,76 @@
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
-				<div class="container pd-0">
-					<div class="page-header">
-						<div class="row">
-							<div class="col-md-12 col-sm-12">
-								<div class="title">
-									<h4>Mechanics</h4>
-								</div>
-								<nav aria-label="breadcrumb" role="navigation">
-									<ol class="breadcrumb">
-										<li class="breadcrumb-item"><a href="./dashboard_d.php">Home</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Mechanics near me</li>
-									</ol>
-								</nav>
+				<div class="page-header">
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="title">
+								<h4>Profile</h4>
 							</div>
+							<nav aria-label="breadcrumb" role="navigation">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="./dashboard_d.php">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">My Profile</li>
+								</ol>
+							</nav>
 						</div>
 					</div>
-					<div class="contact-directory-list">
-						<ul class="row">
-							<li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-								<div class="contact-directory-box">
-									<div class="contact-dire-info text-center">
-										<div class="contact-avatar">
-											<span>
-												<img src="vendors/images/photo2.jpg" alt="">
-											</span>
+				</div>
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-30">
+						<div class="pd-20 card-box height-100-p">
+							<div class="profile-photo">
+								
+								<img src="vendors/images/photo1.jpg" alt="profile image" class="avatar-photo">
+								<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+									
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-body pd-5">
+												<div class="img-container">
+													<img id="image" src="vendors/images/photo2.jpg" alt="Picture">
+												</div>
+											</div>
+											<div class="modal-footer">
+												<input type="submit" value="Update" class="btn btn-primary">
+												<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
 										</div>
-										<div class="contact-name">
-											<h4>Wade Wilson</h4>
-											<p>Pay Rate: <span>&#8358;22,000</span></p>
-											<div class="work text-success"><i class="icon-copy dw dw-flag1"></i> Abuja</div>
-										</div>
-										<div class="profile-sort-desc">
-											Lorem ipsum dolor sit amet, consectetur adipisicing magna aliqua.
-										</div>
-									</div>
-									<div class="view-contact">
-										<a href="javascript:void();">View Profile</a>
 									</div>
 								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="blog-pagination mb-30">
-					<div class="btn-toolbar justify-content-center mb-15">
-						<div class="btn-group">
-							<a href="javascript:void();" class="btn btn-outline-primary prev"><i class="fa fa-angle-double-left"></i></a>
-							<span class="btn btn-primary current">1</span>
-							<a href="#" class="btn btn-outline-primary">2</a>
-							<a href="#" class="btn btn-outline-primary">3</a>
-							<a href="#" class="btn btn-outline-primary next"><i class="fa fa-angle-double-right"></i></a>
+							</div>
+							<h5 class="text-center h5 mb-0">Ross C. Lopez</h5>
+							<p class="text-center text-muted font-14">Lorem ipsum dolor sit amet</p>
+							<div class="profile-info">
+								<h5 class="mb-20 h5 text-blue">My Information</h5>
+								<ul>
+									<li>
+										<span>Email Address:</span>
+										FerdinandMChilds@test.com
+									</li>
+									<li>
+										<span>Phone Number:</span>
+										619-229-0054
+									</li>
+									<li>
+										<span>City:</span>
+										NYC
+									</li>
+									<li>
+										<span>Address:</span>
+										1807 Holden Street<br>
+										San Diego, CA 92115
+									</li>
+								</ul>
+							</div>
+							<div class="profile-social">
+								<h5 class="mb-20 h5 text-blue">Social Links</h5>
+								<ul class="clearfix">
+									<li><a href="#" class="btn" data-bgcolor="#3b5998" data-color="#ffffff"><i class="fa fa-facebook"></i></a></li>
+									<li><a href="#" class="btn" data-bgcolor="#f46f30" data-color="#ffffff"><i class="fa fa-instagram"></i></a></li>
+									<li><a href="#" class="btn" data-bgcolor="#00b489" data-color="#ffffff"><i class="fa fa-whatsapp"></i></a></li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -210,12 +229,41 @@
 			</div>
 		</div>
 	</div>
-
-	
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="src/plugins/cropperjs/dist/cropper.js"></script>
+	<script>
+		window.addEventListener('DOMContentLoaded', function () {
+			var image = document.getElementById('image');
+			var cropBoxData;
+			var canvasData;
+			var cropper;
+
+			$('#modal').on('shown.bs.modal', function () {
+				cropper = new Cropper(image, {
+					autoCropArea: 0.5,
+					dragMode: 'move',
+					aspectRatio: 3 / 3,
+					restore: false,
+					guides: false,
+					center: false,
+					highlight: false,
+					cropBoxMovable: false,
+					cropBoxResizable: false,
+					toggleDragModeOnDblclick: false,
+					ready: function () {
+						cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+					}
+				});
+			}).on('hidden.bs.modal', function () {
+				cropBoxData = cropper.getCropBoxData();
+				canvasData = cropper.getCanvasData();
+				cropper.destroy();
+			});
+		});
+	</script>
 </body>
 </html>
