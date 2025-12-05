@@ -70,13 +70,13 @@
 						<!-- Login form starts here -->
 						<form action="">
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" placeholder="Email">
+								<input type="text" class="form-control form-control-lg" placeholder="Email" name="email">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
 								</div>
 							</div>
 							<div class="input-group custom">
-								<input type="password" class="form-control form-control-lg" placeholder="Password">
+								<input type="password" class="form-control form-control-lg" placeholder="Password" name="password">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
 								</div>
@@ -84,7 +84,7 @@
 							<div class="row pb-30">
 								<div class="col-6">
 									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="customCheck1">
+										<input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
 										<label class="custom-control-label" for="customCheck1">Remember</label>
 									</div>
 								</div>

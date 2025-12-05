@@ -1,7 +1,7 @@
 {
-  "name": "Molgan",
+  "name": "Roadmechs",
   "version": "0.0.2",
-  "description": "Molgan app",
+  "description": "Roadmechs app",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,12 +11,9 @@
     "url": "https://github.com/Emm-Anuel100"
   },
   "keywords": [
-    "Real estate",
-    "Landed properties for sale",
-    "Estate for sale",
-    "Houses for sale"
+    "Book a mechanic"
   ],
-  "author": "Molgan",
+  "author": "Roadmechs",
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.26.7",

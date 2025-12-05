@@ -67,17 +67,17 @@
 						</div>
 
 						<!-- Signup form starts here -->
-						<form>
+						<form action="" method="post">
 							<div class="select-role">
 								<div class="btn-group btn-group-toggle" data-toggle="buttons">
 									<label class="btn active">
-										<input type="radio" name="options" id="admin" value="mechanic">
+										<input type="radio" name="option" id="admin" value="mechanic">
 										<div class="icon"><img src="vendors/images/briefcase.svg" class="svg" alt=""></div>
 										<span>I'm</span>
 										Mechanic
 									</label>
 									<label class="btn">
-										<input type="radio" name="options" id="user" value="driver">
+										<input type="radio" name="option" id="user" value="driver">
 										<div class="icon"><img src="vendors/images/person.svg" class="svg" alt=""></div>
 										<span>I'm</span>
 										Driver
@@ -85,13 +85,13 @@
 								</div>
 							</div>
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" placeholder="Email">
+								<input type="text" class="form-control form-control-lg" name="email" placeholder="Email">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
 								</div>
 							</div>
 							<div class="input-group custom">
-								<input type="password" class="form-control form-control-lg" placeholder="Password">
+								<input type="password" class="form-control form-control-lg" name="password" placeholder="Password">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
 								</div>
@@ -99,7 +99,7 @@
 							<div class="row pb-30">
 								<div class="col-6">
 									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="customCheck1">
+										<input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
 										<label class="custom-control-label" for="customCheck1">Remember</label>
 									</div>
 								</div>
@@ -110,10 +110,6 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="input-group mb-0">
-										<!--
-											use code for form submit
-											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
-										-->
 										<button type="submit" class="btn btn-primary btn-lg btn-block" >Sign Up</button>
 									</div>
 									<div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR</div>
