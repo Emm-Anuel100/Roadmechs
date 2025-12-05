@@ -31,11 +31,25 @@
 	</script>
 </head>
 <body class="login-page">
+        <!-- Preloader starts here -->
+		<div class="pre-loader">
+		<div class="pre-loader-box">
+			<div class='loader-progress' id="progress_div">
+				<div class='bar' id='bar1'></div>
+			</div>
+			<div class='percent' id='percent1'>0%</div>
+			<div class="loading-text">
+				Roadmech
+			</div>
+		</div>
+	</div>
+	<!-- Preloader ends here -->
+
 	<div class="login-header box-shadow">
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
 				<a href="login.php">
-					<img src="vendors/images/deskapp-logo.svg" alt="">
+					<img src="vendors/images/deskapp-logo.png" alt="">
 				</a>
 			</div>
 			
@@ -52,15 +66,17 @@
 						<div class="login-title">
 							<h2 class="text-center text-primary">Login</h2>
 						</div>
+
+						<!-- Login form starts here -->
 						<form action="">
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" placeholder="Username">
+								<input type="text" class="form-control form-control-lg" placeholder="Email">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
 								</div>
 							</div>
 							<div class="input-group custom">
-								<input type="password" class="form-control form-control-lg" placeholder="**********">
+								<input type="password" class="form-control form-control-lg" placeholder="Password">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
 								</div>
@@ -87,11 +103,12 @@
 									</div>
 									<div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR</div>
 									<div class="input-group mb-0">
-										<a class="btn btn-outline-primary btn-lg btn-block" href="register.php">Register</a>
+										<a class="btn btn-outline-primary btn-lg btn-block" href="./signup.php">Register</a>
 									</div>
 								</div>
 							</div>
 						</form>
+						<!-- Login form ends here -->
 					</div>
 				</div>
 			</div>
