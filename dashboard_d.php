@@ -40,7 +40,7 @@
 			</div>
 			<div class='percent' id='percent1'>0%</div>
 			<div class="loading-text">
-				Roadmech
+				Roadmechs
 			</div>
 		</div>
 	</div> -->
@@ -78,14 +78,7 @@
 									<a href="#">
 										<img src="vendors/images/img.jpg" alt="">
 										<h3>John Doe</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="vendors/images/photo1.jpg" alt="">
-										<h3>Lea R. Frith</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+										<p>Viewed your profile</p>
 									</a>
 								</li>
 							</ul>
@@ -158,16 +151,17 @@
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
 							Welcome back <div class="weight-600 font-30 text-blue">Johnny Brown!</div>
 						</h4>
-						<p class="font-18 max-width-600">Lorem ipsum dolor sit ameta. Autem modi, corrupti, nobis ea iure fugiat.</p>
+						<p class="font-18 max-width-600">Stranded.. no worries, we got you.</p>
 					</div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xl-3 mb-30">
+				<div class="col-xl-4 mb-30">
 					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
+						<div class="d-flex flex-wrap align-items-center pd-20">
 							<div class="progress-data">
-								<div id="chart"></div>
+								<!-- <div id="chart"></div> -->
+								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon">
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">&#8358;23,900</div>
@@ -176,11 +170,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xl-3 mb-30">
+				<div class="col-xl-4 mb-30">
 					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
+						<div class="d-flex flex-wrap align-items-center pd-20">
 							<div class="progress-data">
-								<div id="chart2"></div>
+								<!-- <div id="chart2"></div> -->
+								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon">
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">&#8358;14,000</div>
@@ -189,11 +184,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xl-3 mb-30">
+				<div class="col-xl-4 mb-30">
 					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
+						<div class="d-flex flex-wrap align-items-center pd-20">
 							<div class="progress-data">
-								<div id="chart3"></div>
+								<!-- <div id="chart3"></div> -->
+								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon"> 
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">&#8358;3500</div>

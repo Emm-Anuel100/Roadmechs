@@ -34,15 +34,11 @@
 	<div class="login-header box-shadow">
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
-				<a href="login.php">
+				<a href="reset-password.php">
 					<img src="vendors/images/deskapp-logo.png" alt="">
 				</a>
 			</div>
-			<div class="login-menu">
-				<ul>
-					<li><a href="login.php">Login</a></li>
-				</ul>
-			</div>
+			
 		</div>
 	</div>
 	<div class="login-wrap d-flex align-items-center flex-wrap justify-content-center">
@@ -56,8 +52,10 @@
 						<div class="login-title">
 							<h2 class="text-center text-primary">Reset Password</h2>
 						</div>
-						<h6 class="mb-20">Enter your new password, confirm and submit</h6>
-						<form>
+						<h6 class="mb-20">Enter your new password</h6>
+						
+						<!-- reset passwword form starts here -->
+						<form action="" method="post">
 							<div class="input-group custom">
 								<input type="text" class="form-control form-control-lg" placeholder="New Password">
 								<div class="input-group-append custom">
@@ -77,11 +75,12 @@
 											use code for form submit
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
 										-->
-										<a class="btn btn-primary btn-lg btn-block" href="index.php">Submit</a>
+										<button type="submit" class="btn btn-primary btn-lg btn-block">Submit</a>
 									</div>
 								</div>
 							</div>
 						</form>
+						<!-- reset passwword form ends here -->
 					</div>
 				</div>
 			</div>

@@ -39,7 +39,7 @@
 			</div>
 			<div class='percent' id='percent1'>0%</div>
 			<div class="loading-text">
-				Roadmech
+				Roadmechs
 			</div>
 		</div>
 	</div>

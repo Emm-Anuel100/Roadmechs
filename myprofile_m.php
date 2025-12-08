@@ -39,7 +39,7 @@
 			</div>
 			<div class='percent' id='percent1'>0%</div>
 			<div class="loading-text">
-				Roadmech
+				Roadmechs
 			</div>
 		</div>
 	</div> -->
@@ -75,16 +75,9 @@
 							<ul>
 								<li>
 									<a href="#">
-										<img src="vendors/images/img.jpg" alt="">
-										<h3>John Doe</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
 										<img src="vendors/images/photo1.jpg" alt="">
 										<h3>Lea R. Frith</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+										<p>Viewed your profile</p>
 									</a>
 								</li>
 							</ul>
@@ -200,7 +193,7 @@
 										&#8358;23,900
 									</li>
 									<li>
-										<span>City:</span>
+										<span>State:</span>
 										NYC
 									</li>
 									<li>
