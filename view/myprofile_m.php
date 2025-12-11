@@ -1,3 +1,32 @@
+<?php
+session_start();
+// include connection
+include "../config.php";
+
+// include funtions
+include "../functions.php";
+
+// set email sesion
+$email = $_SESSION['email'];
+
+// If driver or email sesssion is not set.. redirect to login page
+if (!isset($_SESSION['mechanic']) || !isset($_SESSION['email'])) {
+    header("Location: ../");
+	exit;
+}
+
+// ===========================
+// GET DRIVER'S INFO FROM FUNCTIONS.PHP WHICH WILL BE LOADED IN PROFILE
+// ===========================
+
+// Get profile
+$profile = getUserProfile($conn, $email);
+if (!$profile) {
+    echo "User not found!";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -91,13 +120,15 @@
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?= $profile['profile_pic'] ?>" alt="profile pic">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name">
+							<?php echo($_SESSION['email']);?>
+						</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="./update_profile_m.php"><i class="dw dw-user1"></i>Update Profile</a>
-						<a class="dropdown-item" href="login.php"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="../logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -157,58 +188,43 @@
 						<div class="pd-20 card-box height-100-p">
 							<div class="profile-photo">
 								
-								<img src="vendors/images/photo1.jpg" alt="profile image" class="avatar-photo">
+								<img src="<?= $profile['profile_pic'] ?>" alt="profile image" class="avatar-photo">
 								<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-									
-									<div class="modal-dialog modal-dialog-centered" role="document">
-										<div class="modal-content">
-											<div class="modal-body pd-5">
-												<div class="img-container">
-													<img id="image" src="vendors/images/photo2.jpg" alt="Picture">
-												</div>
-											</div>
-											<div class="modal-footer">
-												<input type="submit" value="Update" class="btn btn-primary">
-												<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
-							<h5 class="text-center h5 mb-0">Ross C. Lopez</h5>
-							<p class="text-center text-muted font-14">Lorem ipsum dolor sit amet</p>
+							<h5 class="text-center h5 mb-0"><?= $profile['fullname'] ?></h5>
+							<p class="text-center text-muted font-14"><?= $profile['bio'] ?></p>
 							<div class="profile-info">
 								<h5 class="mb-20 h5 text-blue">My Information</h5>
 								<ul>
 									<li>
 										<span>Email Address:</span>
-										FerdinandMChilds@test.com
+										<?= $profile['email'] ?>
 									</li>
 									<li>
 										<span>Phone Number:</span>
-										619-229-0054
+										<?= $profile['phone_no'] ?>
 									</li>
                                     <li>
 										<span>Payrate:</span>
-										&#8358;23,900
+										&#8358;<?= $profile['pay_rate'] ?>
 									</li>
 									<li>
 										<span>State:</span>
-										NYC
+										<?= $profile['state'] ?>
 									</li>
 									<li>
 										<span>Address:</span>
-										1807 Holden Street<br>
-										San Diego, CA 92115
+										<?= $profile['address'] ?>
 									</li>
 								</ul>
 							</div>
 							<div class="profile-social">
 								<h5 class="mb-20 h5 text-blue">Social Links</h5>
 								<ul class="clearfix">
-									<li><a href="#" class="btn" data-bgcolor="#3b5998" data-color="#ffffff"><i class="fa fa-facebook"></i></a></li>
-									<li><a href="#" class="btn" data-bgcolor="#f46f30" data-color="#ffffff"><i class="fa fa-instagram"></i></a></li>
-									<li><a href="#" class="btn" data-bgcolor="#00b489" data-color="#ffffff"><i class="fa fa-whatsapp"></i></a></li>
+									<li><a href="<?php echo $profile['facebook_url'] ?>" target="_blank" class="btn" data-bgcolor="#3b5998" data-color="#ffffff"><i class="fa fa-facebook"></i></a></li>
+									<li><a href="<?php echo $profile['instagram_url']; ?>" target="_blank" class="btn" data-bgcolor="#f46f30" data-color="#ffffff"><i class="fa fa-instagram"></i></a></li>
+									<li><a href="<?php echo $profile['whatsapp_url']; ?>" target="_blank" class="btn" data-bgcolor="#00b489" data-color="#ffffff"><i class="fa fa-whatsapp"></i></a></li>
 								</ul>
 							</div>
 						</div>

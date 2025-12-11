@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+// If driver or email sesssion is not set.. redirect to login page
+if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
+    header("Location: ../");
+	exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,11 +102,13 @@
 						<span class="user-icon">
 							<img src="vendors/images/photo1.jpg" alt="">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name">
+							<?php echo($_SESSION['email']);?>
+						</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="./update_profile_d.php"><i class="dw dw-user1"></i>Update Profile</a>
-						<a class="dropdown-item" href="login.php"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="../logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>

@@ -1,3 +1,60 @@
+<?php
+// start session
+session_start();  
+
+// Include connection file
+include_once "../config.php";
+
+// Message holder
+$alert = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['option'])) {
+
+    $role     = mysqli_real_escape_string($conn, $_POST['option']);
+    $email    = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    // VALIDATION
+    if (empty($role) || empty($email) || empty($password)) {
+        $alert = "all_required";
+    } else {
+
+        // CHECK EMAIL
+        $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        $check->bind_param("s", $email);
+        $check->execute();
+        $check->store_result();
+
+        if ($check->num_rows > 0) {
+            $alert = "email_exists";
+        } else {
+
+            // CREATE ACCOUNT
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("INSERT INTO users (role, email, password) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $role, $email, $hashed);
+
+            if ($stmt->execute()) {
+
+				// create general email session
+                $_SESSION['email'] = $email;
+
+                if ($role == "driver") {
+                    $_SESSION['driver'] = $role;
+                    header("Location: update_profile_d.php");
+                } else {
+                    $_SESSION['mechanic'] = $role;
+                    header("Location: update_profile_m.php");
+                }
+
+            } else {
+                $alert = "create_error";
+            }
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +79,9 @@
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+
+    <!-- Sweet Alert -->
+	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
@@ -32,7 +92,7 @@
 </head>
 <body class="login-page">
 	    <!-- Preloader starts here -->
-		<div class="pre-loader">
+		<!-- <div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class='loader-progress' id="progress_div">
 				<div class='bar' id='bar1'></div>
@@ -42,7 +102,7 @@
 				Roadmechs
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<!-- Preloader ends here -->
 	 
 	<div class="login-header box-shadow">
@@ -67,7 +127,7 @@
 						</div>
 
 						<!-- Signup form starts here -->
-						<form action="" method="post">
+						<form action="./signup.php" method="post">
 							<div class="select-role">
 								<div class="btn-group btn-group-toggle" data-toggle="buttons">
 									<label class="btn active">
@@ -97,13 +157,7 @@
 								</div>
 							</div>
 							<div class="row pb-30">
-								<div class="col-6">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
-										<label class="custom-control-label" for="customCheck1">Remember</label>
-									</div>
-								</div>
-								<div class="col-6">
+								<div class="col-12">
 									<div class="forgot-password"><a href="javascript:void();">Forgot Password</a></div>
 								</div>
 							</div>
@@ -114,7 +168,7 @@
 									</div>
 									<div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR</div>
 									<div class="input-group mb-0">
-										<a class="btn btn-outline-primary btn-lg btn-block" href="login.php">Login</a>
+										<a class="btn btn-outline-primary btn-lg btn-block" href="../">Login</a>
 									</div>
 								</div>
 							</div>
@@ -125,6 +179,47 @@
 			</div>
 		</div>
 	</div>
+
+	<?php if (!empty($alert)): ?>
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+
+    <?php if ($alert == "all_required"): ?>
+        Swal.fire({
+            icon: "error",
+            title: "All fields are required",
+            toast: true,
+            position: "top-end",
+            timer: 3000,
+            showConfirmButton: false
+        });
+    <?php endif; ?>
+	<?php if ($alert == "email_exists"): ?>
+        Swal.fire({
+            icon: "error",
+            title: "Email already exists!",
+            toast: true,
+            position: "top-end",
+            timer: 3000,
+            showConfirmButton: false
+        });
+    <?php endif; ?>
+
+    <?php if ($alert == "create_error"): ?>
+        Swal.fire({
+            icon: "error",
+            title: "Error creating account",
+            toast: true,
+            position: "top-end",
+            timer: 3000,
+            showConfirmButton: false
+        });
+    <?php endif; ?>
+
+	});
+	</script>
+	<?php endif; ?>
+
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>

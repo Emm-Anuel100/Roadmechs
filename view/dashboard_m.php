@@ -1,3 +1,32 @@
+<?php
+session_start();
+// include connection
+include "../config.php";
+
+// include funtions
+include "../functions.php";
+
+// set email sesion
+$email = $_SESSION['email'];
+
+// If driver or email sesssion is not set.. redirect to login page
+if (!isset($_SESSION['mechanic']) || !isset($_SESSION['email'])) {
+    header("Location: ../");
+	exit;
+}
+
+// ===========================
+// GET MECHANIC'S INFO FROM FUNCTIONS.PHP WHICH WILL BE LOADED IN PROFILE
+// ===========================
+
+// Get profile
+$profile = getUserProfile($conn, $email);
+if (!$profile) {
+    echo "User not found!";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +62,7 @@
 	</script>
 </head>
 <body>
-	<!-- <div class="pre-loader">
+	 <div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class='loader-progress' id="progress_div">
 				<div class='bar' id='bar1'></div>
@@ -43,7 +72,7 @@
 				Roadmechs
 			</div>
 		</div>
-	</div> -->
+	</div> 
 
 	<div class="header">
 		<div class="header-left">
@@ -76,8 +105,8 @@
 							<ul>
 								<li>
 									<a href="#">
-										<img src="vendors/images/img.jpg" alt="">
-										<h3>John Doe</h3>
+										<img src="vendors/images/photo1.jpg" alt="">
+										<h3>Lea R. Frith</h3>
 										<p>Viewed your profile</p>
 									</a>
 								</li>
@@ -92,13 +121,15 @@
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?= $profile['profile_pic'] ?>" alt="profile pic">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name">
+							<?php echo($_SESSION['email']);?>
+						</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="./update_profile_d.php"><i class="dw dw-user1"></i>Update Profile</a>
-						<a class="dropdown-item" href="login.php"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="./update_profile_m.php"><i class="dw dw-user1"></i>Update Profile</a>
+						<a class="dropdown-item" href="../logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -108,7 +139,7 @@
 	<!--*** Nav. menu starts here ***-->
 	<div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="./dashboard_d.php">
+			<a href="./dashboard_m.php">
 				<img src="vendors/images/deskapp-logo.png" alt="" class="light-logo">
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
@@ -119,18 +150,13 @@
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li>
-						<a href="./dashboard_d.php" class="dropdown-toggle no-arrow">
+						<a href="./dashboard_m.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-home"></span><span class="mtext">Home</span>
 						</a>
 					</li>
 					<li>
-						<a href="./myprofile_d.php" class="dropdown-toggle no-arrow">
+						<a href="./myprofile_m.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-user1"></span><span class="mtext">Profile</span>
-						</a>
-					</li>
-					<li class="dropdown">
-						<a href="./mechanics.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user-2"></span><span class="mtext">Mechanics</span>
 						</a>
 					</li>
 				</ul>
@@ -149,9 +175,10 @@
 					</div>
 					<div class="col-md-8">
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue">Johnny Brown!</div>
+							Welcome back 
+							<div class="weight-600 font-30 text-blue"><?= !empty($profile['fullname']) ? htmlspecialchars($profile['fullname']) : "User"; ?>!</div>
 						</h4>
-						<p class="font-18 max-width-600">Stranded.. no worries, we got you.</p>
+						<p class="font-18 max-width-600">You're a hero.</p>
 					</div>
 				</div>
 			</div>
@@ -165,7 +192,7 @@
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">&#8358;23,900</div>
-								<div class="weight-600 font-14">Spent this year</div>
+								<div class="weight-600 font-14">Made this year</div>
 							</div>
 						</div>
 					</div>
@@ -179,7 +206,7 @@
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">&#8358;14,000</div>
-								<div class="weight-600 font-14">Spent this month</div>
+								<div class="weight-600 font-14">Made this month</div>
 							</div>
 						</div>
 					</div>
@@ -189,11 +216,11 @@
 						<div class="d-flex flex-wrap align-items-center pd-20">
 							<div class="progress-data">
 								<!-- <div id="chart3"></div> -->
-								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon"> 
+								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon">
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">&#8358;3500</div>
-								<div class="weight-600 font-14">Spent Today</div>
+								<div class="weight-600 font-14">Made Today</div>
 							</div>
 						</div>
 					</div>
