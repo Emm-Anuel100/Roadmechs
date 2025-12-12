@@ -21,10 +21,11 @@ function getUserProfile($conn, $email) {
     $profile['phone_no']    = !empty($user['phone_no']) ? $user['phone_no'] : "N/A";
     $profile['state']       = !empty($user['state']) ? $user['state'] : "N/A";
     $profile['address']     = !empty($user['address']) ? nl2br($user['address']) : "N/A";
+    $profile['pay_rate']    = !empty($user['pay_rate']) ? $user['pay_rate'] : 0;
     $profile['fb_uname']    = !empty($user['fb_uname']) ? $user['fb_uname'] : "";
     $profile['insta_uname'] = !empty($user['insta_uname']) ? $user['insta_uname'] : "";
     $profile['wa_no']       = !empty($user['wa_no']) ? $user['wa_no'] : "";
-    $profile['pay_rate']       = !empty($user['pay_rate']) ? $user['pay_rate'] : "..";
+
 
     // Prepare full URLs for social links
     $profile['facebook_url']  = !empty($profile['fb_uname']) ? "https://www.facebook.com/" . ltrim($profile['fb_uname'], "@") : "#";

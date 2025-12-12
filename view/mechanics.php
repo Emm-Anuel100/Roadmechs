@@ -1,12 +1,32 @@
 <?php
 session_start();
+include '../config.php'; // ensure DB connection
 
-// If driver or email sesssion is not set.. redirect to login page
+// if driver not logged in redirect to login page
 if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
     header("Location: ../");
-	exit;
+    exit;
 }
+
+// email session
+$email = $_SESSION['email'];
+
+// Fetch all mechanics (we'll filter by city in JS)
+$sql = "SELECT id, fullname, phone_no, pay_rate, state, address, profile_pic 
+        FROM users WHERE role='mechanic'";
+
+$result = $conn->query($sql);
+
+$mechanics = [];
+while ($row = $result->fetch_assoc()) {
+    $mechanics[] = $row;
+}
+
+// Pass to JS
+$mechanicsJSON = json_encode($mechanics);
+
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -29,6 +49,13 @@ if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+
+	<!-- SweetAlert CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Leadflet JS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
@@ -169,31 +196,9 @@ if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
 							</div>
 						</div>
 					</div>
+					<!--- section to dynamically load mechanics -->
 					<div class="contact-directory-list">
-						<ul class="row">
-							<li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-								<div class="contact-directory-box">
-									<div class="contact-dire-info text-center">
-										<div class="contact-avatar">
-											<span>
-												<img src="vendors/images/photo2.jpg" alt="">
-											</span>
-										</div>
-										<div class="contact-name">
-											<h4>Wade Wilson</h4>
-											<p>Pay Rate: <span>&#8358;22,000</span></p>
-											<div class="work text-success"><i class="icon-copy dw dw-flag1"></i> Abuja</div>
-										</div>
-										<div class="profile-sort-desc">
-											Lorem ipsum dolor sit amet, consectetur adipisicing magna aliqua.
-										</div>
-									</div>
-									<div class="view-contact">
-										<a href="javascript:void();">View Profile</a>
-									</div>
-								</div>
-							</li>
-						</ul>
+						<ul class="row" id="mechanicsList"></ul>
 					</div>
 				</div>
 
@@ -215,11 +220,131 @@ if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
 		</div>
 	</div>
 
+
+<!-- Js script to get nearby mechanics -->
+<script>
+let mechanics = <?php echo $mechanicsJSON; ?>;
+
+// Geoapify Api key for Reverce Geocoding
+const geoapifyKey = "ff42e06657244517ac9eddc90644c5ba"; 
+let driverCity = null;
+
+// Open map modal for a mechanic
+function openMap(mechLat, mechLon, address) {
+    if (!mechLat || !mechLon) {
+        Swal.fire("Location Error", "Mechanic address could not be located.", "error");
+        return;
+    }
+
+    document.getElementById("mapModal").style.display = "block";
+
+    const map = L.map('mapid').setView([mechLat, mechLon], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    L.marker([mechLat, mechLon]).addTo(map)
+        .bindPopup("Mechanic: " + address)
+        .openPopup();
+}
+
+function closeMap() {
+    document.getElementById("mapModal").style.display = "none";
+    document.getElementById("mapid").innerHTML = ""; // reset map
+}
+
+// Render mechanics cards filtered by city
+function renderMechanics() {
+    if (!driverCity) return;
+
+    const container = document.getElementById("mechanicsList");
+    let html = "";
+
+    const filtered = mechanics.filter(m => {
+        return m.state.toLowerCase() === driverCity.toLowerCase();
+    });
+
+    if (filtered.length === 0) {
+        container.innerHTML = "<p class='text-center'>No mechanics found in your city.</p>";
+        return;
+    }
+
+    filtered.forEach((m, index) => {
+        const address = m.address + ", " + m.state;
+        html += `
+        <li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+            <div class="contact-directory-box">
+                <div class="contact-dire-info text-center">
+                    <div class="contact-avatar">
+                        <span>
+                            <img src="../uploads/${m.profile_pic || '../uploads/default_img.png'}" alt="profile pic">
+                        </span>
+                    </div>
+                    <div class="contact-name">
+                        <h4>${m.fullname}</h4>
+                        <p>Pay Rate: <span>&#8358;${m.pay_rate || 'N/A'}</span></p>
+                        <div class="work " style="cursor:pointer; font-weight:600; color: green"
+                             onclick="openMap(${m.lat || 'null'}, ${m.lon || 'null'}, '${address}')">
+                            <i class="icon-copy dw dw-map"></i> view on map
+                        </div>
+                        <br>
+                        <p><i class="icon-copy dw dw-smartphone"></i> <span>${m.phone_no}</span></p>
+                    </div>
+                    <div class="profile-sort-desc">
+                        ${address}
+                    </div>
+                </div>
+				    <div class="view-contact">
+                        <a href="javascript:void();">PAY MECHANIC</a>
+                    </div>
+            </li>`;
+    });
+
+    container.innerHTML = html;
+}
+
+// Get driver city via Geoapify reverse geocoding
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        try {
+            const res = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${geoapifyKey}`);
+            const data = await res.json();
+            const props = data.features[0].properties;
+
+            // City fallback chain
+            driverCity = props.city || props.town || props.village || props.county;
+
+            if (!driverCity) {
+                Swal.fire("Location Error", "Could not detect your city.", "error");
+                return;
+            }
+
+            console.log("Driver city detected:", driverCity);
+
+            // Filter mechanics by this city
+            renderMechanics();
+
+        } catch (err) {
+            console.error(err);
+            Swal.fire("Location Error", "Could not detect your city.", "error");
+        }
+    }, err => {
+        Swal.fire("Location Error", "Cannot get GPS coordinates.", "error");
+    });
+} else {
+    Swal.fire("Error", "Your device cannot fetch GPS location.", "error");
+}
+</script>
+
 	
-	<!-- js -->
-	<script src="vendors/scripts/core.js"></script>
-	<script src="vendors/scripts/script.min.js"></script>
-	<script src="vendors/scripts/process.js"></script>
-	<script src="vendors/scripts/layout-settings.js"></script>
+<!-- js -->
+<script src="vendors/scripts/core.js"></script>
+<script src="vendors/scripts/script.min.js"></script>
+<script src="vendors/scripts/process.js"></script>
+<script src="vendors/scripts/layout-settings.js"></script>
 </body>
 </html>

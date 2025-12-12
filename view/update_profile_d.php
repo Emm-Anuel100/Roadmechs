@@ -164,7 +164,6 @@ $facebookUrl  = !empty($facebook)  ? "https://www.facebook.com/" . ltrim($facebo
 $instagramUrl = !empty($instagram) ? "https://www.instagram.com/" . ltrim($instagram, "@") : "#";
 $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/", "", $whatsapp) : "#";
 
-
 ?>
 
 

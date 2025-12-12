@@ -25,11 +25,12 @@ $getUser->bind_param("s", $email);
 $getUser->execute();
 $currentUser = $getUser->get_result()->fetch_assoc();
 
+
 // Initialize alert buffer
 $alertScripts = '';
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
 
     // Prepare update array
     $updates = [];
@@ -37,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname'])) {
     $types   = "";
 
     // Helper function to add fields only when not empty
-    function addField(&$updates, &$params, &$types, $column, $value) {
-        if (!empty($value)) {
+	 function addField(&$updates, &$params, &$types, $column, $value) {
+        if (isset($value) && trim($value) !== "") {
             $updates[] = "$column=?";
             $params[]  = $value;
             $types    .= "s";
@@ -50,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname'])) {
     addField($updates, $params, $types, "bio", $_POST['bio']);
     addField($updates, $params, $types, "state", $_POST['state']);
     addField($updates, $params, $types, "phone_no", $_POST['phone']);
-    addField($updates, $params, $types, "pay_rate", $_POST['pay_rate']);
     addField($updates, $params, $types, "address", $_POST['address']);
+	addField($updates, $params, $types, "pay_rate", $_POST['payrate']);
     addField($updates, $params, $types, "fb_uname", $_POST['facebook']);
     addField($updates, $params, $types, "wa_no", $_POST['whatsapp']);
     addField($updates, $params, $types, "insta_uname", $_POST['instagram']);
@@ -163,7 +164,6 @@ if (!$profile) {
 $facebookUrl  = !empty($facebook)  ? "https://www.facebook.com/" . ltrim($facebook, "@") : "#";
 $instagramUrl = !empty($instagram) ? "https://www.instagram.com/" . ltrim($instagram, "@") : "#";
 $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/", "", $whatsapp) : "#";
-
 
 ?>
 
@@ -400,7 +400,7 @@ $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/",
 
 													<div class="form-group">
 														<label>Email</label>
-														<input class="form-control form-control-lg" type="email" value="<?php echo $email; ?>" readonly>
+														<input class="form-control form-control-lg" name="email" type="email" value="<?php echo $email; ?>" readonly>
 													</div>
 
 													<div class="form-group">
@@ -425,11 +425,7 @@ $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/",
 
 													<div class="form-group">
 														<label>Pay Rate *</label>
-														<input class="form-control form-control-lg" type="text" name="pay_rate">
-													</div>
-
-													<div class="form-group">
-														<input class="form-control form-control-lg" type="hidden" name="pay_rate">
+														<input class="form-control form-control-lg" type="text" name="payrate">
 													</div>
 
 													<div class="form-group">
