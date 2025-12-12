@@ -220,16 +220,27 @@ $mechanicsJSON = json_encode($mechanics);
 		</div>
 	</div>
 
+	<!-- Map pop up modal -->
+	<div id="mapModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+		<div style="position:relative; width:90%; height:80%; margin:5% auto; background:#fff; border-radius:10px;">
+			<div id="mapid" style="width:100%; height:100%; border-radius:10px;"></div>
+			<button onclick="closeMap()" style="position:absolute; top:10px; right:10px; z-index:1000; padding:5px 10px;">Close</button>
+		</div>
+	</div>
+
 
 <!-- Js script to get nearby mechanics -->
 <script>
+// PHP mechanics passed to JavaScript
 let mechanics = <?php echo $mechanicsJSON; ?>;
 
-// Geoapify Api key for Reverce Geocoding
-const geoapifyKey = "ff42e06657244517ac9eddc90644c5ba"; 
+// Your Geoapify API Key
+const geoapifyKey = "ff42e06657244517ac9eddc90644c5ba";
+
+// Driver city
 let driverCity = null;
 
-// Open map modal for a mechanic
+// 🔥 FUNCTION — Open map modal with mechanic pin only
 function openMap(mechLat, mechLon, address) {
     if (!mechLat || !mechLon) {
         Swal.fire("Location Error", "Mechanic address could not be located.", "error");
@@ -238,84 +249,110 @@ function openMap(mechLat, mechLon, address) {
 
     document.getElementById("mapModal").style.display = "block";
 
+    // Initialize map
     const map = L.map('mapid').setView([mechLat, mechLon], 14);
 
+    // Add OSM tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
     }).addTo(map);
 
+    // Mechanic marker
     L.marker([mechLat, mechLon]).addTo(map)
-        .bindPopup("Mechanic: " + address)
+        .bindPopup(address)
         .openPopup();
 }
 
+// Close map modal
 function closeMap() {
     document.getElementById("mapModal").style.display = "none";
     document.getElementById("mapid").innerHTML = ""; // reset map
 }
 
-// Render mechanics cards filtered by city
-function renderMechanics() {
-    if (!driverCity) return;
+// Geocode mechanics addresses via Geoapify
+async function geocodeMechanics() {
+    for (let m of mechanics) {
+        if (!m.lat || !m.lon) {
+            const query = encodeURIComponent(`${m.address}, ${m.state}, Nigeria`);
+            try {
+                const res = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${geoapifyKey}`);
+                const data = await res.json();
+                if (data.features && data.features.length > 0) {
+                    m.lat = data.features[0].properties.lat;
+                    m.lon = data.features[0].properties.lon;
+                } else {
+                    m.lat = null;
+                    m.lon = null;
+                }
+            } catch (err) {
+                console.error("Geocoding mechanic failed:", err);
+                m.lat = null;
+                m.lon = null;
+            }
+        }
+    }
+}
 
+// Render mechanics cards
+function renderMechanics() {
     const container = document.getElementById("mechanicsList");
     let html = "";
 
-    const filtered = mechanics.filter(m => {
-        return m.state.toLowerCase() === driverCity.toLowerCase();
-    });
+    // Filter mechanics by driver city
+    const filteredMechanics = mechanics.filter(m => m.state.toLowerCase() === driverCity.toLowerCase());
 
-    if (filtered.length === 0) {
-        container.innerHTML = "<p class='text-center'>No mechanics found in your city.</p>";
+    if (filteredMechanics.length === 0) {
+        container.innerHTML = "<p class='text-center'>Sorry, no mechanic available in your city.</p>";
         return;
     }
 
-    filtered.forEach((m, index) => {
-        const address = m.address + ", " + m.state;
+    filteredMechanics.forEach((m, index) => {
+        const fullAddress = m.address + ", " + m.state + ", Nigeria";
         html += `
         <li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
             <div class="contact-directory-box">
                 <div class="contact-dire-info text-center">
                     <div class="contact-avatar">
                         <span>
-                            <img src="../uploads/${m.profile_pic || '../uploads/default_img.png'}" alt="profile pic">
+                            <img src="../uploads/${m.profile_pic || '../uploads/default_img.png'}">
                         </span>
                     </div>
                     <div class="contact-name">
                         <h4>${m.fullname}</h4>
                         <p>Pay Rate: <span>&#8358;${m.pay_rate || 'N/A'}</span></p>
-                        <div class="work " style="cursor:pointer; font-weight:600; color: green"
-                             onclick="openMap(${m.lat || 'null'}, ${m.lon || 'null'}, '${address}')">
+                        <div class="work" style="cursor:pointer; font-weight:600; color: green"
+                             onclick="openMap(${m.lat}, ${m.lon}, '${fullAddress}')">
                             <i class="icon-copy dw dw-map"></i> view on map
                         </div>
                         <br>
                         <p><i class="icon-copy dw dw-smartphone"></i> <span>${m.phone_no}</span></p>
                     </div>
                     <div class="profile-sort-desc">
-                        ${address}
+                        ${fullAddress}
                     </div>
                 </div>
-				    <div class="view-contact">
-                        <a href="javascript:void();">PAY MECHANIC</a>
-                    </div>
-            </li>`;
+				<div class="view-contact">
+					<a href="javascript:void();">PAY MECHANIC</a>
+				</div>
+            </div>
+        </li>`;
     });
 
     container.innerHTML = html;
 }
 
-// Get driver city via Geoapify reverse geocoding
+// Get driver's GPS and city
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(async pos => {
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
 
         try {
+            // Reverse geocode to get city
             const res = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${geoapifyKey}`);
             const data = await res.json();
             const props = data.features[0].properties;
 
-            // City fallback chain
             driverCity = props.city || props.town || props.village || props.county;
 
             if (!driverCity) {
@@ -323,22 +360,25 @@ if (navigator.geolocation) {
                 return;
             }
 
-            console.log("Driver city detected:", driverCity);
+            // Geocode mechanics before rendering
+            await geocodeMechanics();
 
-            // Filter mechanics by this city
+            // Render mechanics
             renderMechanics();
 
         } catch (err) {
             console.error(err);
             Swal.fire("Location Error", "Could not detect your city.", "error");
         }
+
     }, err => {
-        Swal.fire("Location Error", "Cannot get GPS coordinates.", "error");
+        Swal.fire("Location Error", "We need your location to find nearby mechanics.", "error");
     });
 } else {
     Swal.fire("Error", "Your device cannot fetch GPS location.", "error");
 }
 </script>
+
 
 	
 <!-- js -->
