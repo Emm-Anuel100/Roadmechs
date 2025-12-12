@@ -27,7 +27,6 @@ $mechanicsJSON = json_encode($mechanics);
 
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -234,13 +233,13 @@ $mechanicsJSON = json_encode($mechanics);
 // PHP mechanics passed to JavaScript
 let mechanics = <?php echo $mechanicsJSON; ?>;
 
-// Your Geoapify API Key
+// Geoapify Reverce Geocoding API Key
 const geoapifyKey = "ff42e06657244517ac9eddc90644c5ba";
 
 // Driver city
 let driverCity = null;
 
-// 🔥 FUNCTION — Open map modal with mechanic pin only
+// FUNCTION — Open map modal with mechanic pin only
 function openMap(mechLat, mechLon, address) {
     if (!mechLat || !mechLon) {
         Swal.fire("Location Error", "Mechanic address could not be located.", "error");
@@ -378,7 +377,6 @@ if (navigator.geolocation) {
     Swal.fire("Error", "Your device cannot fetch GPS location.", "error");
 }
 </script>
-
 
 	
 <!-- js -->

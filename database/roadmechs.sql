@@ -1,20 +1,21 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
--- http://www.phpmyadmin.net
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2025 at 06:10 PM
--- Server version: 5.5.40
--- PHP Version: 5.5.19
+-- Generation Time: Dec 12, 2025 at 07:26 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `roadmechs`
@@ -26,9 +27,9 @@ SET time_zone = "+00:00";
 -- Table structure for table `payment`
 --
 
-CREATE TABLE IF NOT EXISTS `payment` (
-`id` bigint(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `payment` (
+  `id` bigint(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -36,31 +37,32 @@ CREATE TABLE IF NOT EXISTS `payment` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-`id` bigint(250) NOT NULL,
-  `full name` varchar(50) DEFAULT NULL,
+CREATE TABLE `users` (
+  `id` bigint(250) NOT NULL,
+  `fullname` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `bio` varchar(100) DEFAULT NULL,
   `state` varchar(50) DEFAULT NULL,
-  `profile_pic` varchar(250) DEFAULT NULL,
+  `profile_pic` varchar(250) DEFAULT 'default_img.png',
   `phone_no` varchar(50) DEFAULT NULL,
-  `pay_rate` varchar(50) DEFAULT NULL,
+  `pay_rate` bigint(50) DEFAULT 0,
   `address` varchar(100) DEFAULT NULL,
   `fb_uname` varchar(50) DEFAULT NULL,
   `wa_no` varchar(50) DEFAULT NULL,
   `insta_uname` varchar(50) DEFAULT NULL,
-  `notification` int(10) NOT NULL DEFAULT '0' COMMENT ' 1= checked, 0 = unchecked',
+  `notification` int(10) NOT NULL DEFAULT 0 COMMENT ' 1= checked, 0 = unchecked',
   `role` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `full name`, `email`, `password`, `bio`, `state`, `profile_pic`, `phone_no`, `pay_rate`, `address`, `fb_uname`, `wa_no`, `insta_uname`, `notification`, `role`) VALUES
-(1, NULL, 'immanuel@yahoo.com', '$2y$10$Lj5lzGjQmjrZROVA/tagkO4WkdCDXsK21N.sXy30z6YRFLyN8dWuW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'mechanic'),
-(2, NULL, 'chinweokwumary08@gmail.com', '$2y$10$9Sg4ZZ2atIFmr4rXNphRneX0wkFfxu/.TtEIsez8ydyMXtoAanoza', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'mechanic');
+INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `bio`, `state`, `profile_pic`, `phone_no`, `pay_rate`, `address`, `fb_uname`, `wa_no`, `insta_uname`, `notification`, `role`) VALUES
+(13, 'Melvin', 'ch.immanuel@yahoo.co', '$2y$10$mJvhcBFG3FwQT9K/f1d4Ou923wJrkcnspf2mngSOmNpu7PleoSFV.', 'Rolls Royce Driver.. in the city of Abuja', 'Kogi', 'IMG_693ac3850cd411.20752468.png', '09075439515', 0, 'jikwoyi phase 3 abuja', 'fb', '812188', 'insta', 0, 'driver'),
+(14, 'Fredrick', 'ch.immanuel@yahoo.com', '$2y$10$DnNlQcGzS.gY6enKdrZqE.RGQMt8172FgCDn6fikY/8Xu11TF9VMK', 'A real mechanic .. with years of experience', 'Abuja', 'IMG_693af94eb38480.31588336.jpg', '090', 40000, 'jikwoyi phase 2 junction', 'emmy', '08121', 'emmy_1', 0, 'mechanic'),
+(15, 'Adanna', 'ada@gmail.com', '$2y$10$ilVmyEjRuJRY8fHMM22GD.xj4P9GLp60xHZiiz7AYp8fO3EgrKxjW', 'world class', 'Abia', 'default_img.png', '09033636345', 45000, 'Agwangede jikwoyi phase 3', NULL, NULL, NULL, 0, 'mechanic');
 
 --
 -- Indexes for dumped tables
@@ -70,13 +72,13 @@ INSERT INTO `users` (`id`, `full name`, `email`, `password`, `bio`, `state`, `pr
 -- Indexes for table `payment`
 --
 ALTER TABLE `payment`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -86,12 +88,15 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` bigint(250) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `id` bigint(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

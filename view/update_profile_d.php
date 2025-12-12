@@ -415,7 +415,7 @@ $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/",
 
 													<div class="form-group">
 														<label>Profile picture</label>
-														<input class="form-control form-control-lg" type="file" name="profile" accept=".png,.jpg,.jpeg">
+														<input class="form-control form-control-lg custom-file" type="file" name="profile" accept=".png,.jpg,.jpeg">
 													</div>
 
 													<div class="form-group">
@@ -481,35 +481,32 @@ $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/",
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
 	<script src="src/plugins/cropperjs/dist/cropper.js"></script>
-	<script>
-		window.addEventListener('DOMContentLoaded', function () {
-			var image = document.getElementById('image');
-			var cropBoxData;
-			var canvasData;
-			var cropper;
 
-			$('#modal').on('shown.bs.modal', function () {
-				cropper = new Cropper(image, {
-					autoCropArea: 0.5,
-					dragMode: 'move',
-					aspectRatio: 3 / 3,
-					restore: false,
-					guides: false,
-					center: false,
-					highlight: false,
-					cropBoxMovable: false,
-					cropBoxResizable: false,
-					toggleDragModeOnDblclick: false,
-					ready: function () {
-						cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
-					}
-				});
-			}).on('hidden.bs.modal', function () {
-				cropBoxData = cropper.getCropBoxData();
-				canvasData = cropper.getCanvasData();
-				cropper.destroy();
-			});
-		});
-	</script>
+<style>
+/* Hide the default file upload button */
+input[type="file"].custom-file::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+input[type="file"].custom-file::before {
+    content: "\f093"; /* FontAwesome upload icon code,*/
+    display: inline-block;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 2.3px 10px;
+	position: relative;
+	right: 6px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    font-family: 'FontAwesome';
+}
+
+input[type="file"].custom-file:hover::before {
+    background: #e0e0e0;
+}
+</style>
 </body>
 </html>
