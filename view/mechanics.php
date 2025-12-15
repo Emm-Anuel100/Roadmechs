@@ -1,6 +1,8 @@
 <?php
 session_start();
 include '../config.php'; // ensure DB connection
+// include funtions
+include "../functions.php";
 
 // if driver not logged in redirect to login page
 if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
@@ -11,8 +13,15 @@ if (!isset($_SESSION['driver']) || !isset($_SESSION['email'])) {
 // email session
 $email = $_SESSION['email'];
 
-// Fetch all mechanics (we'll filter by city in JS)
-$sql = "SELECT id, fullname, phone_no, pay_rate, state, address, profile_pic 
+// Get profile
+$profile = getUserProfile($conn, $email);
+if (!$profile) {
+    echo "User not found!";
+    exit;
+}
+
+// Fetch all mechanics (filter by city in JS)
+$sql = "SELECT id, fullname, email, phone_no, pay_rate, state, address, profile_pic, wallet 
         FROM users WHERE role='mechanic'";
 
 $result = $conn->query($sql);
@@ -126,7 +135,7 @@ $mechanicsJSON = json_encode($mechanics);
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?= $profile['profile_pic'] ?>" alt="profile pic">
 						</span>
 						<span class="user-name">
 							<?php echo($_SESSION['email']);?>
@@ -189,7 +198,7 @@ $mechanicsJSON = json_encode($mechanics);
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item"><a href="./dashboard_d.php">Home</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Mechanics near me</li>
+										<li class="breadcrumb-item active" aria-current="page">Mechanics</li>
 									</ol>
 								</nav>
 							</div>
@@ -228,7 +237,7 @@ $mechanicsJSON = json_encode($mechanics);
 	</div>
 
 
-<!-- Js script to get nearby mechanics -->
+<!-- Js script to get mechanics -->
 <script>
 // PHP mechanics passed to JavaScript
 let mechanics = <?php echo $mechanicsJSON; ?>;
@@ -268,6 +277,220 @@ function closeMap() {
     document.getElementById("mapid").innerHTML = ""; // reset map
 }
 
+
+//****  INTEGRATE CARDANO (ADA) PAYMENT */
+// Get driver email from PHP session
+const DRIVER_EMAIL = "<?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?>";
+
+// Debug: Check what we're getting
+console.log("Driver Email:", DRIVER_EMAIL);
+console.log("Driver Email Length:", DRIVER_EMAIL.length);
+console.log("Driver Email Type:", typeof DRIVER_EMAIL);
+
+// System Escrow Wallet (dummy/test wallet)
+const SYSTEM_ESCROW_WALLET = "addr_test1vzpwq95z3xyum8vqndgdd9mdnmafh3djcxnc6jemlgdmswcve6tkw";
+
+// Mock Cardano Payment Function
+function mockCardanoPayment(fromWallet, toWallet, amountAda) {
+    return new Promise(resolve => {
+        console.log("===== CARDANO TEST PAYMENT =====");
+        console.log("From:", fromWallet);
+        console.log("To:", toWallet);
+        console.log("Amount:", amountAda.toFixed(8), "ADA");
+        console.log("Network: Cardano Testnet");
+        console.log("Status: SUCCESS (SIMULATED)");
+        console.log("================================");
+
+        setTimeout(() => {
+            resolve({
+                status: "success",
+                tx_hash: "tx_" + Math.random().toString(36).substring(2, 15)
+            });
+        }, 1500);
+    });
+}
+
+// Show Payment Confirmation Modal
+function showPaymentConfirmation(mechanicEmail, payRateNaira, walletAddress) {
+    Swal.fire({
+        title: 'Confirm Payment',
+        html: `
+            <div style="text-align: left; padding: 20px;">
+                <p style="font-size: 16px; margin: 10px 0;">
+                    <strong>Mechanic:</strong> ${mechanicEmail}
+                </p>
+                <p style="font-size: 20px; color: #0033AD; margin: 10px 0;">
+                    <strong>Amount:</strong> ₦${parseFloat(payRateNaira).toLocaleString()}
+                </p>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <p style="font-size: 14px; color: #666; margin: 10px 0;">
+                    <i class="fa fa-info-circle"></i> 
+                     ADA amount to be paid to mechanic will be base on the current ADA/NAIRA value
+                </p>
+                <p style="font-size: 13px; color: #999; margin: 10px 0;">
+                    <strong>Mechanic's Wallet Address:</strong> ${walletAddress.substring(0, 20)}...
+                </p>
+            </div>
+        `,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#0033AD',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fa fa-credit-card"></i> Proceed to Payment',
+        cancelButtonText: '<i class="fa fa-times"></i> Cancel',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-primary btn-lg',
+            cancelButton: 'btn btn-secondary btn-lg'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // NOW call the actual payment function
+            payMechanicInADA(mechanicEmail, payRateNaira, walletAddress);
+        }
+    });
+}
+
+// Pay mechanic in ADA (Actual payment function)
+async function payMechanicInADA(mechanicEmail, payRateNaira, walletAddress) {
+    try {
+        // Debug inputs
+        console.log("=== FUNCTION INPUTS ===");
+        console.log("Mechanic's Email:", mechanicEmail);
+        console.log("Pay Rate (Naira):", payRateNaira);
+        console.log("Wallet Address:", walletAddress);
+        console.log("=======================");
+
+        // Check if wallet address exists
+        if (!walletAddress || walletAddress === 'undefined' || walletAddress === '') {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Mechanic wallet address is missing. Please contact support.",
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        // Check if driver email exists
+        if (!DRIVER_EMAIL) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "You must be logged in to make a payment",
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Show loading
+        Swal.fire({
+            title: 'Processing Payment...',
+            html: 'Please wait while we process your ADA payment',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Fetch current market ADA / Naira rate
+        const rateResp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=ngn');
+        
+        if (!rateResp.ok) {
+            throw new Error("Failed to fetch ADA rate from CoinGecko");
+        }
+
+        const rateData = await rateResp.json();
+        const nairaToAdaRate = rateData.cardano?.ngn;
+
+        if (!nairaToAdaRate) {
+            throw new Error("ADA rate not available");
+        }
+
+        const payRateAda = payRateNaira / nairaToAdaRate;
+        console.log("Pay rate in ADA:", payRateAda);
+        console.log("ADA/NGN Rate:", nairaToAdaRate);
+
+        // Simulate payment
+        const paymentResult = await mockCardanoPayment(
+            SYSTEM_ESCROW_WALLET, 
+            walletAddress, 
+            payRateAda
+        );
+
+        if (paymentResult.status === "success") {
+            // Prepare transaction data (match DB Date format)
+            const transactionDate = new Date().toISOString().split('T')[0];
+
+            const transactionData = {
+                email_m: mechanicEmail,
+                email_d: DRIVER_EMAIL,
+                amount_ada: payRateAda,
+                transaction_date: transactionDate,
+                tx_hash: paymentResult.tx_hash
+            };
+
+            console.log("=== TRANSACTION DATA ===");
+            console.log("Mechanic's Email:", mechanicEmail);
+            console.log("Driver Email:", DRIVER_EMAIL);
+            console.log("Amount ADA:", payRateAda);
+            console.log("Date:", transactionDate);
+            console.log("TX Hash:", paymentResult.tx_hash);
+            console.log("Full Data:", JSON.stringify(transactionData));
+            console.log("========================");
+
+            // Send to backend
+            const resp = await fetch('../model/insert_payment.php', {
+            
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(transactionData)
+            });
+
+            if (!resp.ok) {
+                throw new Error(`HTTP error! status: ${resp.status}`);
+            }
+
+            const result = await resp.json();
+            console.log("Backend response:", result);
+
+            if (result.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Payment Successful!",
+                    html: `
+                        <p><strong>Amount:</strong> ${payRateAda.toFixed(8)} ADA (₦${payRateNaira.toLocaleString()})</p>
+                        <p><strong>Mechanic's Email:</strong> ${mechanicEmail}</p>
+                        <p><strong>TX Hash:</strong> ${paymentResult.tx_hash}</p>
+                        <p><strong>Curent Rate:</strong> 1 ADA = ₦${nairaToAdaRate.toFixed(2)}</p>
+                    `,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // reload page
+                    // location.reload();
+                });
+            } else {
+                throw new Error(result.message || "Failed to record transaction in database");
+            }
+
+        } else {
+            throw new Error("Payment processing failed");
+        }
+
+    } catch (err) {
+        console.error("Payment Error:", err);
+        Swal.fire({
+            icon: "error",
+            title: "Payment Failed",
+            text: err.message || "Could not process payment. Please try again.",
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+
+
 // Geocode mechanics addresses via Geoapify
 async function geocodeMechanics() {
     for (let m of mechanics) {
@@ -301,7 +524,7 @@ function renderMechanics() {
     const filteredMechanics = mechanics.filter(m => m.state.toLowerCase() === driverCity.toLowerCase());
 
     if (filteredMechanics.length === 0) {
-        container.innerHTML = "<p class='text-center'>Sorry, no mechanic available in your city.</p>";
+        container.innerHTML = "<p class='text-center'>Sorry, no mechanic available.</p>";
         return;
     }
 
@@ -331,14 +554,17 @@ function renderMechanics() {
                     </div>
                 </div>
 				<div class="view-contact">
-					<a href="javascript:void();">PAY MECHANIC</a>
+					<a href="javascript:void(0);"
+					onclick="showPaymentConfirmation('${m.email}', ${m.pay_rate}, '${m.wallet}')">
+					Pay Mechanic In (ADA)
+					</a>
 				</div>
             </div>
         </li>`;
     });
-
     container.innerHTML = html;
 }
+
 
 // Get driver's GPS and city
 if (navigator.geolocation) {
@@ -376,6 +602,7 @@ if (navigator.geolocation) {
 } else {
     Swal.fire("Error", "Your device cannot fetch GPS location.", "error");
 }
+
 </script>
 
 	

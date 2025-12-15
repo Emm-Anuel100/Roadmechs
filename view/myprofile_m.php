@@ -210,6 +210,10 @@ if (!$profile) {
 										&#8358;<?= $profile['pay_rate'] ?>
 									</li>
 									<li>
+										<span>Wallet Address (ADA):</span>
+										<?php echo $profile['wallet']; ?>
+									</li>
+									<li>
 										<span>State:</span>
 										<?= $profile['state'] ?>
 									</li>

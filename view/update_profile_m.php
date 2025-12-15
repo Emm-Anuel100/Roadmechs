@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     addField($updates, $params, $types, "phone_no", $_POST['phone']);
     addField($updates, $params, $types, "address", $_POST['address']);
 	addField($updates, $params, $types, "pay_rate", $_POST['payrate']);
+	addField($updates, $params, $types, "wallet", $_POST['wallet']);
     addField($updates, $params, $types, "fb_uname", $_POST['facebook']);
     addField($updates, $params, $types, "wa_no", $_POST['whatsapp']);
     addField($updates, $params, $types, "insta_uname", $_POST['instagram']);
@@ -355,6 +356,10 @@ $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/",
                     <span>Pay Rate:</span>
                     &#8358;<?php echo $profile['pay_rate']; ?>
                 </li>
+				<li>
+                    <span>Wallet Address (ADA):</span>
+                    <?php echo $profile['wallet']; ?>
+                </li>
                 <li>
                     <span>Address:</span>
                     <?php echo $profile['address']; ?>
@@ -426,6 +431,11 @@ $whatsappUrl  = !empty($whatsapp)  ? "https://wa.me/" . preg_replace("/[^0-9]/",
 													<div class="form-group">
 														<label>Pay Rate *</label>
 														<input class="form-control form-control-lg" type="text" name="payrate">
+													</div>
+
+													<div class="form-group">
+														<label>Wallet Address (ADA) *</label>
+														<input class="form-control form-control-lg" type="text" name="wallet">
 													</div>
 
 													<div class="form-group">

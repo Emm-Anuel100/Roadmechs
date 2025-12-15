@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2025 at 07:26 PM
+-- Generation Time: Dec 15, 2025 at 06:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -28,8 +28,21 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `payment` (
-  `id` bigint(255) NOT NULL
+  `id` bigint(255) NOT NULL,
+  `email_d` varchar(100) DEFAULT NULL,
+  `email_m` varchar(100) DEFAULT NULL,
+  `amount_ada` float NOT NULL DEFAULT 0,
+  `transaction_date` date DEFAULT NULL,
+  `tx_hash` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`id`, `email_d`, `email_m`, `amount_ada`, `transaction_date`, `tx_hash`) VALUES
+(3, 'ch.immanuel@yahoo.co', 'ch.immanuel@yahoo.com', 68.3737, '2025-12-14', 'tx_nyr524ekf4'),
+(4, 'ch.immanuel@yahoo.co', 'ch.immanuel@yahoo.com', 62.8765, '2025-12-15', 'tx_gyhrgth');
 
 -- --------------------------------------------------------
 
@@ -47,6 +60,7 @@ CREATE TABLE `users` (
   `profile_pic` varchar(250) DEFAULT 'default_img.png',
   `phone_no` varchar(50) DEFAULT NULL,
   `pay_rate` bigint(50) DEFAULT 0,
+  `wallet` varchar(255) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `fb_uname` varchar(50) DEFAULT NULL,
   `wa_no` varchar(50) DEFAULT NULL,
@@ -59,10 +73,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `bio`, `state`, `profile_pic`, `phone_no`, `pay_rate`, `address`, `fb_uname`, `wa_no`, `insta_uname`, `notification`, `role`) VALUES
-(13, 'Melvin', 'ch.immanuel@yahoo.co', '$2y$10$mJvhcBFG3FwQT9K/f1d4Ou923wJrkcnspf2mngSOmNpu7PleoSFV.', 'Rolls Royce Driver.. in the city of Abuja', 'Kogi', 'IMG_693ac3850cd411.20752468.png', '09075439515', 0, 'jikwoyi phase 3 abuja', 'fb', '812188', 'insta', 0, 'driver'),
-(14, 'Fredrick', 'ch.immanuel@yahoo.com', '$2y$10$DnNlQcGzS.gY6enKdrZqE.RGQMt8172FgCDn6fikY/8Xu11TF9VMK', 'A real mechanic .. with years of experience', 'Abuja', 'IMG_693af94eb38480.31588336.jpg', '090', 40000, 'jikwoyi phase 2 junction', 'emmy', '08121', 'emmy_1', 0, 'mechanic'),
-(15, 'Adanna', 'ada@gmail.com', '$2y$10$ilVmyEjRuJRY8fHMM22GD.xj4P9GLp60xHZiiz7AYp8fO3EgrKxjW', 'world class', 'Abia', 'default_img.png', '09033636345', 45000, 'Agwangede jikwoyi phase 3', NULL, NULL, NULL, 0, 'mechanic');
+INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `bio`, `state`, `profile_pic`, `phone_no`, `pay_rate`, `wallet`, `address`, `fb_uname`, `wa_no`, `insta_uname`, `notification`, `role`) VALUES
+(13, 'Dave fred', 'ch.immanuel@yahoo.co', '$2y$10$mJvhcBFG3FwQT9K/f1d4Ou923wJrkcnspf2mngSOmNpu7PleoSFV.', 'Rolls Royce Driver.. in the city of Abuja', 'Kogi', 'IMG_693c5ece260cf8.92393655.jpg', '09075439515', 0, NULL, 'jikwoyi phase 3 abuja', 'fb', '812188', 'insta', 0, 'driver'),
+(14, 'Sammy Dave', 'ch.immanuel@yahoo.com', '$2y$10$DnNlQcGzS.gY6enKdrZqE.RGQMt8172FgCDn6fikY/8Xu11TF9VMK', 'A real mechanic .. with years of experience', 'Abuja', 'IMG_693c5f261e8dc3.68660336.jpg', '090', 40000, 'oihugyfguiu867r6fgyhhres45r7t757tdt', 'jikwoyi phase 2 junction', 'emmy', '08121', 'emmy_1', 0, 'mechanic'),
+(15, 'Adanna', 'ada@gmail.com', '$2y$10$ilVmyEjRuJRY8fHMM22GD.xj4P9GLp60xHZiiz7AYp8fO3EgrKxjW', 'world class', 'Abia', 'default_img.png', '09033636345', 45000, NULL, 'Agwangede jikwoyi phase 3', NULL, NULL, NULL, 0, 'mechanic');
 
 --
 -- Indexes for dumped tables
@@ -88,7 +102,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
