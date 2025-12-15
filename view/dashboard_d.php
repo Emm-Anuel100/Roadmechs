@@ -25,6 +25,68 @@ if (!$profile) {
     echo "User not found!";
     exit;
 }
+
+// ===========================
+// GET DRIVER'S FUNDS PAID TO MECHANIC'S FOR CURRENT YEAR, MONTH, AND DAY
+// ===========================
+// Initialize variables
+$ada_this_year = 0;
+$ada_this_month = 0;
+$ada_today = 0;
+
+if ($email) {
+    // Get current year, month, and today's date
+    $current_year = date('Y');
+    $current_month = date('Y-m');
+    $today = date('Y-m-d');
+
+    // Total ADA paid to mechanic THIS YEAR
+    $stmt_year = $conn->prepare("
+        SELECT SUM(amount_ada) as total 
+        FROM payment 
+        WHERE email_d = ? 
+        AND YEAR(transaction_date) = ?
+    ");
+    $stmt_year->bind_param("si", $email, $current_year);
+    $stmt_year->execute();
+    $result_year = $stmt_year->get_result();
+    $row_year = $result_year->fetch_assoc();
+    $ada_this_year = $row_year['total'] ?? 0;
+    $stmt_year->close();
+
+    // Total ADA paid to mechanic THIS MONTH
+    $stmt_month = $conn->prepare("
+        SELECT SUM(amount_ada) as total 
+        FROM payment
+        WHERE email_d = ? 
+        AND DATE_FORMAT(transaction_date, '%Y-%m') = ?
+    ");
+    $stmt_month->bind_param("ss", $email, $current_month);
+    $stmt_month->execute();
+    $result_month = $stmt_month->get_result();
+    $row_month = $result_month->fetch_assoc();
+    $ada_this_month = $row_month['total'] ?? 0;
+    $stmt_month->close();
+
+    // Total ADA paid to mechanic TODAY
+    $stmt_today = $conn->prepare("
+        SELECT SUM(amount_ada) as total 
+        FROM payment 
+        WHERE email_d = ? 
+        AND transaction_date = ?
+    ");
+    $stmt_today->bind_param("ss", $email, $today);
+    $stmt_today->execute();
+    $result_today = $stmt_today->get_result();
+    $row_today = $result_today->fetch_assoc();
+    $ada_today = $row_today['total'] ?? 0;
+    $stmt_today->close();
+}
+
+// Round to 2 decimal places for display
+$ada_this_year = number_format($ada_this_year, 2, '.', '');
+$ada_this_month = number_format($ada_this_month, 2, '.', '');
+$ada_today = number_format($ada_today, 2, '.', '');
 ?>
 
 <!DOCTYPE html>
@@ -201,7 +263,9 @@ if (!$profile) {
 								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon">
 							</div>
 							<div class="widget-data">
-								<div class="h4 mb-0">&#8358;23,900</div>
+							<div class="h4 mb-0"><span><?php echo $ada_this_year; ?></span>
+							 <span class="h6">ADA</span>
+							</div>
 								<div class="weight-600 font-14">Spent this year</div>
 							</div>
 						</div>
@@ -215,7 +279,9 @@ if (!$profile) {
 								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon">
 							</div>
 							<div class="widget-data">
-								<div class="h4 mb-0">&#8358;14,000</div>
+							<div class="h4 mb-0"><span><?php echo $ada_this_month; ?></span>
+							<span class="h6">ADA</span>
+							</div>
 								<div class="weight-600 font-14">Spent this month</div>
 							</div>
 						</div>
@@ -229,19 +295,268 @@ if (!$profile) {
 								<img src="./vendors/images/icon-online-wallet.png" alt="online wallet icon"> 
 							</div>
 							<div class="widget-data">
-								<div class="h4 mb-0">&#8358;3500</div>
+								<div class="h4 mb-0"><span><?php echo $ada_today; ?></span> 
+								<span class="h6">ADA</span>
+							    </div>
 								<div class="weight-600 font-14">Spent Today</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<!-- section todisplay current value of Naira to ADA -->
+			<div class="ada-naira-chart">
+    <div class="chart-header">
+        <div class="chart-title">ADA/NGN Exchange Rate</div>
+        <div class="live-indicator">
+            <div class="pulse-dot"></div>
+            <span>LIVE</span>
+        </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div class="loading-spinner" id="loadingState">
+        <div class="spinner"></div>
+        <span>Fetching live rate...</span>
+    </div>
+    
+    <!-- Current Rate Display -->
+    <div class="current-rate-box" id="rateDisplay" style="display: none;">
+        <div class="rate-label" style="color: #f8f5f5;">Current Rate</div>
+        <div class="rate-value" style="color: #f8f5f5;">
+            <span id="currentRate">₦---</span>
+        </div>
+        <div class="rate-change" id="rateChange">--</div>
+    </div>
+    
+    <!-- High and Low Display -->
+    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;" id="highLowDisplay">
+        <div class="current-rate-box" style="flex: 1; max-width: 250px; padding: 20px;">
+            <div class="rate-label" style="font-size: 12px;color: #f8f5f5;">24h High</div>
+            <div class="rate-value" style="font-size: 28px;color: #f8f5f5;" id="highRate">₦---</div>
+        </div>
+        <div class="current-rate-box" style="flex: 1; max-width: 250px; padding: 20px; color: #f8f5f5;">
+            <div class="rate-label" style="font-size: 12px;color: #f8f5f5;">24h Low</div>
+            <div class="rate-value" style="font-size: 28px;color: #f8f5f5;" id="lowRate">₦---</div>
+        </div>
+    </div>
+    
+    <div class="update-time" id="updateTime" style="display: none;">
+        Last updated: --
+    </div>
+    </div>
+
 	
 			<div class="footer-wrap pd-20 mb-20 card-box">
 				&copy;Roadmechs
 			</div>
 		</div>
 	</div>
+
+    <!-- style for ADA/NGN conversion section -->
+	<style>
+        .ada-naira-chart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .chart-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .current-rate-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .rate-item {
+            text-align: center;
+            color: white;
+        }
+        
+        .rate-label {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .rate-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .rate-change {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .rate-change.positive {
+            color: #4ade80;
+        }
+        
+        .rate-change.negative {
+            color: #f87171;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            height: 400px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .update-time {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+	
+	<!-- Fetch current ADA / NAIRA value -->
+	<script>
+let currentAdaRate = 0;
+
+// Fetch ADA price from CoinGecko
+async function fetchAdaPrice() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=ngn&include_24hr_change=true&include_24hr_high_low=true');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch price');
+        }
+        
+        const data = await response.json();
+        
+        if (!data.cardano || !data.cardano.ngn) {
+            throw new Error('Invalid data received');
+        }
+        
+        currentAdaRate = data.cardano.ngn;
+        const change24h = data.cardano.ngn_24h_change || 0;
+        const high24h = data.cardano.ngn_24h_high || currentAdaRate;
+        const low24h = data.cardano.ngn_24h_low || currentAdaRate;
+        
+        // Hide loading, show content
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('rateDisplay').style.display = 'block';
+        document.getElementById('highLowDisplay').style.display = 'flex';
+        document.getElementById('updateTime').style.display = 'block';
+        
+        // Update current rate
+        document.getElementById('currentRate').textContent = '₦' + currentAdaRate.toFixed(2);
+        
+        // Update 24h high and low
+        document.getElementById('highRate').textContent = '₦' + high24h.toFixed(2);
+        document.getElementById('lowRate').textContent = '₦' + low24h.toFixed(2);
+        
+        // Update 24h change
+        const changeEl = document.getElementById('rateChange');
+        const changeText = (change24h >= 0 ? '↑ +' : '↓ ') + change24h.toFixed(2) + '% (24h)';
+        changeEl.textContent = changeText;
+        changeEl.className = 'rate-change ' + (change24h >= 0 ? 'positive' : 'negative');
+        
+        // Update timestamp
+        const now = new Date();
+        document.getElementById('updateTime').textContent = 
+            'Last updated: ' + now.toLocaleString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true
+            });
+        
+        console.log('ADA Rate updated:', currentAdaRate, 'High:', high24h, 'Low:', low24h);
+        
+    } catch (error) {
+        console.error('Error fetching ADA price:', error);
+        
+        // Show error state
+        document.getElementById('loadingState').innerHTML = `
+            <span style="color: #f87171;">⚠️ Unable to fetch live rate. Retrying...</span>
+        `;
+    }
+}
+
+// Initialize
+async function init() {
+    // Fetch immediately
+    await fetchAdaPrice();
+    
+    // Update every 30 seconds
+    setInterval(fetchAdaPrice, 30000);
+}
+
+// Start when page loads
+window.addEventListener('load', init);
+</script>
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>

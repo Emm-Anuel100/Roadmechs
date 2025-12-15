@@ -1,5 +1,4 @@
 <?php
-
 //********* */ FUNCTION TO FETCH USER'S DETAILS FROM DB START HERE**********//
 function getUserProfile($conn, $email) {
     // Prepare statement
@@ -22,10 +21,10 @@ function getUserProfile($conn, $email) {
     $profile['state']       = !empty($user['state']) ? $user['state'] : "N/A";
     $profile['address']     = !empty($user['address']) ? nl2br($user['address']) : "N/A";
     $profile['pay_rate']    = !empty($user['pay_rate']) ? $user['pay_rate'] : 0;
+    $profile['wallet']    = !empty($user['wallet']) ? $user['wallet'] : "N/A";
     $profile['fb_uname']    = !empty($user['fb_uname']) ? $user['fb_uname'] : "";
     $profile['insta_uname'] = !empty($user['insta_uname']) ? $user['insta_uname'] : "";
     $profile['wa_no']       = !empty($user['wa_no']) ? $user['wa_no'] : "";
-
 
     // Prepare full URLs for social links
     $profile['facebook_url']  = !empty($profile['fb_uname']) ? "https://www.facebook.com/" . ltrim($profile['fb_uname'], "@") : "#";
