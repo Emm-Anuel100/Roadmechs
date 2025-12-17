@@ -89,7 +89,7 @@ The app integrates **Cardano (ADA) payments** to provide:
 - AJAX  
 - SweetAlert  
 - MySQLi
-- Json
+- JSON
 
 ## 🧪 Current Status
 
