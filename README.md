@@ -88,7 +88,8 @@ The app integrates **Cardano (ADA) payments** to provide:
 ### Tools & Utilities
 - AJAX  
 - SweetAlert  
-- MySQLi  
+- MySQLi
+- Json
 
 ## 🧪 Current Status
 
