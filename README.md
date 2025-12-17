@@ -19,7 +19,7 @@ This app solves these issues by:
 
 - Finding mechanics **based on the driver’s real-time location**
 - Displaying service pricing clearly
-- Showing **live ADA ↔ Naira exchange rates**
+- Showing **live ADA<->Naira exchange rates**
 - Processing payments using **Cardano (ADA)**
 - Keeping transaction records
 
@@ -44,7 +44,7 @@ This app solves these issues by:
 - Mechanics are fetched **based on the driver’s current location at that time**
 - Ensures faster response and reduced waiting time
 - Designed for real-world roadside scenarios
-- Location is used **only for matching** during the session (MVP)
+- Location is used **only for matching** during the session
 
 ---
 
@@ -53,7 +53,7 @@ This app solves these issues by:
 The app integrates **Cardano (ADA) payments** to provide:
 
 - Transparent digital transactions
-- Real-time ADA conversion from Naira
+- Real-time ADA<->Naira exchange rate
 - Logged and traceable payments
 
 ### 🔐 Driver Escrow Wallet (MVP)
@@ -68,18 +68,17 @@ The app integrates **Cardano (ADA) payments** to provide:
 - HTML5  
 - CSS3 
 - JavaScript (Vanilla JS)  
-- Responsive UI  
 
 ### Backend
 - PHP  
 - MySQL  
-- Session-based authentication
-
+- REST API
+  
 ### Location & Maps
 - Browser Geolocation API  
 - Leaflet for maps
-- Geoapify for distance calculation
-
+- Geoapify for getting driver's current location using the latitude and longitude gotten from the browser
+  
 ### Blockchain & Payments
 - Cardano (ADA)  
 - Pre-production network  
