@@ -2,7 +2,7 @@
 
 A **web app** that helps drivers **quickly find nearby mechanics based on their current location** when their vehicle breaks down, with **Cardano (ADA) payment integration** for transparent and digital transactions.
 
-This project is built as an **MVP / demo**, focused on solving real roadside problems while demonstrating Cardano payment integration.
+This project is built as an **MVP**, focused on solving real roadside problems while demonstrating Cardano payment integration.
 
 ---
 
