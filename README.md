@@ -1,3 +1,4 @@
+## Roadmechs
 
 A **web app** that helps drivers **quickly find nearby mechanics based on their current location** when their vehicle breaks down, with **Cardano (ADA) payment integration** for transparent and digital transactions.
 
@@ -127,9 +128,3 @@ Before running the app locally, make sure you have the following installed:
 - **Web Server** (XAMPP, MAMP, WAMP, or Apache/Nginx)  
 - **Browser** with JavaScript enabled (for geolocation)  
 ---
-
-## 🤝 Final Note
-
-This app focuses on **speed, clarity, and trust**.
-
-## When drivers need help on the road, the system ensures they 
